@@ -15,6 +15,7 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Iterator;
 
+
 class Node
 {
   int x;
@@ -32,7 +33,12 @@ class Node
     this.visited = false;
 	  this.hasparent = hasparent;
   }
-
+  public int getparentx(){
+    return this.parent_x;
+  }
+  public int getparenty(){
+    return this.parent_y;
+  }
   public void set_parent(int direction)
 	{
 		if (!this.hasparent){
@@ -296,70 +302,33 @@ public void turn(int agent_direction, Boolean bump)
       }
     break;
     }
-  //}
-  // else
-  // {
-  //   switch (agent_direction) {
-  //   case MyAgentState.NORTH:
-  //     if(world[agent_x_position][agent_y_position-1] == UNKNOWN)
-  //     {
-  //       Q.add(ACTION_MOVE_FORWARD);
-  //     }
-  //     else
-  //     {
-  //       //gotoparent
-  //       // Q.add(ACTION_TURN_RIGHT);
-  //       // Q.add(ACTION_TURN_RIGHT);
-  //       // Q.add(ACTION_MOVE_FORWARD);
-  //       Q.add(ACTION_NONE);
-  //     }
-  //     break;
-  //   case MyAgentState.EAST:
-  //     if(world[agent_x_position+1][agent_y_position] == UNKNOWN)
-  //     {
-  //       Q.add(ACTION_MOVE_FORWARD);
-  //     }
-  //     else
-  //     {
-  //       //gotoparent
-  //       // Q.add(ACTION_TURN_RIGHT);
-  //       // Q.add(ACTION_TURN_RIGHT);
-  //       // Q.add(ACTION_MOVE_FORWARD);
-  //       Q.add(ACTION_NONE);
-  //     }
-  //       break;
-  //   case MyAgentState.SOUTH:
-  //     if(world[agent_x_position][agent_y_position+1] == UNKNOWN)
-  //     {
-  //       Q.add(ACTION_MOVE_FORWARD);
-  //     }
-  //     else
-  //     {
-  //       //gotoparent
-  //       // Q.add(ACTION_TURN_RIGHT);
-  //       // Q.add(ACTION_TURN_RIGHT);
-  //       // Q.add(ACTION_MOVE_FORWARD);
-  //       Q.add(ACTION_NONE);
-  //     }
-  //
-  //       break;
-  //   case MyAgentState.WEST:
-  //     if(world[agent_x_position-1][agent_y_position] == UNKNOWN)
-  //     {
-  //       Q.add(ACTION_MOVE_FORWARD);
-  //     }
-  //     else
-  //     {
-  //       //gotoparent
-  //       // Q.add(ACTION_TURN_RIGHT);
-  //       // Q.add(ACTION_TURN_RIGHT);
-  //       // Q.add(ACTION_MOVE_FORWARD);
-  //       Q.add(ACTION_NONE);
-  //     }
-  //     break;
-  //   }
-  // }
 
+}
+
+public int gotoparent(Node n){
+  //move vacuumcleaner to parent for n
+ //node - parent
+ int retdirection;
+ if (agent_x_position != n.getparentx() ){
+   //move west or east
+   if ( n.getparentx() - agent_x_position < 0){
+     //west
+     retdirection = WEST;
+   } else{
+     //west
+     retdirection = EAST;
+   }
+ } else{
+   //move south or west.
+   if ( n.getparenty() - agent_x_position < 0){
+     //north
+     retdirection = NORTH;
+   } else{
+     //south
+     retdirection = SOUTH;
+   }
+ }
+ return retdirection;
 }
 
 
