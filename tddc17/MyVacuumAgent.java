@@ -188,7 +188,8 @@ class MyAgentState
    if (!n.hasparent){
      //gohome!
       gohome(home,n,direction);
-      //Q.add(ACTION_NONE);
+      Q.add(ACTION_SUCK);
+      Q.add(ACTION_NONE);
     }
 
    System.out.println("gotoparent nodes parents");
@@ -293,21 +294,21 @@ public void turn(int agent_direction, Boolean bump)
 //{
     switch (agent_direction) {
     case MyAgentState.NORTH:
-      if(!bump && world[agent_x_position][agent_y_position-1] == UNKNOWN && world[agent_x_position][agent_y_position-1] != WALL)
+      if(!bump && world[agent_x_position][agent_y_position-1] == UNKNOWN && world[agent_x_position][agent_y_position-1] != WALL || world[agent_x_position][agent_y_position-1] == HOME)
       {
         Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position+1][agent_y_position] != WALL && world[agent_x_position+1][agent_y_position] == UNKNOWN )
+      else if(world[agent_x_position+1][agent_y_position] != WALL && world[agent_x_position+1][agent_y_position] == UNKNOWN || world[agent_x_position+1][agent_y_position] == HOME )
       {
         Q.add(ACTION_TURN_RIGHT);
         Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position-1][agent_y_position] != WALL && world[agent_x_position-1][agent_y_position] == UNKNOWN)
+      else if(world[agent_x_position-1][agent_y_position] != WALL && world[agent_x_position-1][agent_y_position] == UNKNOWN || world[agent_x_position-1][agent_y_position] == HOME)
       {
         Q.add(ACTION_TURN_LEFT);
         Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position][agent_y_position+1] != WALL && world[agent_x_position][agent_y_position+1] == UNKNOWN)
+      else if(world[agent_x_position][agent_y_position+1] != WALL && world[agent_x_position][agent_y_position+1] == UNKNOWN || world[agent_x_position][agent_y_position+1] == HOME)
       {
         //turn 180 degrees
         Q.add(ACTION_TURN_RIGHT);
@@ -321,21 +322,21 @@ public void turn(int agent_direction, Boolean bump)
       }
       break;
     case MyAgentState.EAST:
-      if(!bump && world[agent_x_position+1][agent_y_position] == UNKNOWN && world[agent_x_position+1][agent_y_position] != WALL)
+      if(!bump && world[agent_x_position+1][agent_y_position] == UNKNOWN && world[agent_x_position+1][agent_y_position] != WALL || world[agent_x_position+1][agent_y_position] == HOME)
       {
           Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position][agent_y_position+1] != WALL && world[agent_x_position][agent_y_position+1] == UNKNOWN )
+      else if(world[agent_x_position][agent_y_position+1] != WALL && world[agent_x_position][agent_y_position+1] == UNKNOWN || world[agent_x_position][agent_y_position+1] == HOME)
       {
         Q.add(ACTION_TURN_RIGHT);
         Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position][agent_y_position-1] != WALL && world[agent_x_position][agent_y_position-1] == UNKNOWN)
+      else if(world[agent_x_position][agent_y_position-1] != WALL && world[agent_x_position][agent_y_position-1] == UNKNOWN || world[agent_x_position][agent_y_position-1] == HOME)
       {
         Q.add(ACTION_TURN_LEFT);
         Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position-1][agent_y_position] != WALL && world[agent_x_position-1][agent_y_position] == UNKNOWN)
+      else if(world[agent_x_position-1][agent_y_position] != WALL && world[agent_x_position-1][agent_y_position] == UNKNOWN || world[agent_x_position-1][agent_y_position] == HOME)
       {
         Q.add(ACTION_TURN_RIGHT);
         Q.add(ACTION_TURN_RIGHT);
@@ -348,21 +349,21 @@ public void turn(int agent_direction, Boolean bump)
       }
     break;
     case MyAgentState.SOUTH:
-      if(!bump && world[agent_x_position][agent_y_position+1] == UNKNOWN && world[agent_x_position][agent_y_position+1] != WALL)
+      if(!bump && world[agent_x_position][agent_y_position+1] == UNKNOWN && world[agent_x_position][agent_y_position+1] != WALL || world[agent_x_position][agent_y_position+1] == HOME)
       {
           Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position-1][agent_y_position] != WALL && world[agent_x_position-1][agent_y_position] == UNKNOWN )
+      else if(world[agent_x_position-1][agent_y_position] != WALL && world[agent_x_position-1][agent_y_position] == UNKNOWN || world[agent_x_position-1][agent_y_position] == HOME )
       {
         Q.add(ACTION_TURN_RIGHT);
          Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position+1][agent_y_position] != WALL && world[agent_x_position+1][agent_y_position] == UNKNOWN)
+      else if(world[agent_x_position+1][agent_y_position] != WALL && world[agent_x_position+1][agent_y_position] == UNKNOWN || world[agent_x_position+1][agent_y_position] == HOME)
       {
          Q.add(ACTION_TURN_LEFT);
          Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position][agent_y_position-1] != WALL && world[agent_x_position][agent_y_position-1] == UNKNOWN)
+      else if(world[agent_x_position][agent_y_position-1] != WALL && world[agent_x_position][agent_y_position-1] == UNKNOWN || world[agent_x_position][agent_y_position-1] == HOME)
       {
         //turn 180 degrees
         Q.add(ACTION_TURN_RIGHT);
@@ -376,21 +377,21 @@ public void turn(int agent_direction, Boolean bump)
       }
     break;
     case MyAgentState.WEST:
-      if(!bump && world[agent_x_position-1][agent_y_position] == UNKNOWN && world[agent_x_position-1][agent_y_position] != WALL)
+      if(!bump && world[agent_x_position-1][agent_y_position] == UNKNOWN && world[agent_x_position-1][agent_y_position] != WALL || world[agent_x_position-1][agent_y_position] == HOME)
       {
         Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position][agent_y_position-1] != WALL && world[agent_x_position][agent_y_position-1] == UNKNOWN )
+      else if(world[agent_x_position][agent_y_position-1] != WALL && world[agent_x_position][agent_y_position-1] == UNKNOWN || world[agent_x_position][agent_y_position-1] == HOME)
       {
          Q.add(ACTION_TURN_RIGHT);
          Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position][agent_y_position+1] != WALL && world[agent_x_position][agent_y_position+1] == UNKNOWN)
+      else if(world[agent_x_position][agent_y_position+1] != WALL && world[agent_x_position][agent_y_position+1] == UNKNOWN || world[agent_x_position][agent_y_position+1] == HOME)
       {
          Q.add(ACTION_TURN_LEFT);
          Q.add(ACTION_MOVE_FORWARD);
       }
-      else if(world[agent_x_position+1][agent_y_position] != WALL && world[agent_x_position+1][agent_y_position] == UNKNOWN)
+      else if(world[agent_x_position+1][agent_y_position] != WALL && world[agent_x_position+1][agent_y_position] == UNKNOWN || world[agent_x_position+1][agent_y_position] == HOME)
       {
         //turn 180 degrees
         Q.add(ACTION_TURN_RIGHT);
@@ -409,11 +410,40 @@ public void turn(int agent_direction, Boolean bump)
 public void gohome(Vector<Integer> home,Node n, int agent_direction)
   {
 
-    int rightturns;
+    int goal_x = 1;
+    int goal_y = 1;
+    int cur_x = n.getx();
+    int cur_y = n.gety();
     int cur_dir = agent_direction;
-    System.out.println("curdir: " + cur_dir + "start_dir" + n.startdir);
+    //turn west
+  /*  while(cur_dir != WEST)
+      {
+        cur_dir++;
+        if(cur_dir > 3 )
+          {cur_dir=0;}
+
+        if(cur_dir < 0)
+          {cur_dir=3;}
+
+        Q.add(ACTION_TURN_RIGHT);
+      }
+
+
+    while(cur_x != goal_x)
+    {
+      Q.add(ACTION_MOVE_FORWARD);
+      cur_x--;
+    }
+    //turn NORTH
+    Q.add(ACTION_TURN_RIGHT);
+    while(cur_y != goal_y)
+    {
+      Q.add(ACTION_MOVE_FORWARD);
+      cur_y--;
+    }
+*/
     //turn to agent startdirection
-    while(cur_dir != n.startdir)
+  /* while(cur_dir != n.startdir)
     {
       cur_dir++;
       if(cur_dir > 3 )
@@ -434,12 +464,12 @@ public void gohome(Vector<Integer> home,Node n, int agent_direction)
         case ACTION_TURN_RIGHT:
         //make left turn
         Q.add(ACTION_TURN_LEFT);
-        first_forw = true;
+        //first_forw = true;
         break;
         case ACTION_TURN_LEFT:
         //make right turn
         Q.add(ACTION_TURN_RIGHT);
-        first_forw = true;
+        //first_forw = true;
         break;
         case ACTION_MOVE_FORWARD:
 
@@ -455,7 +485,7 @@ public void gohome(Vector<Integer> home,Node n, int agent_direction)
         break;
       }
     }
-    Q.add(ACTION_NONE);
+    //Q.add(ACTION_NONE);*/
   }
 
 public void printnode(int x,int y){
@@ -473,7 +503,7 @@ class MyAgentProgram implements AgentProgram {
 	private Random random_generator = new Random();
 
 	// Here you can define your variables!
-	public int iterationCounter = 4500;
+	public int iterationCounter = 1000;
 	public MyAgentState state = new MyAgentState();
   public int turn=0;
 
