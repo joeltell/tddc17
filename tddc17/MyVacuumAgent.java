@@ -23,6 +23,7 @@ class Node
   int parent_y;
   Boolean visited;
   Boolean hasparent;
+  int startdir;
   public Node(int x, int y, Boolean hasparent)
   {
     this.x = x;
@@ -31,6 +32,7 @@ class Node
     this.parent_y = 0;
     this.visited = false;
 	  this.hasparent = hasparent;
+    this.startdir = 999;
   }
   public int getparentx(){
     return this.parent_x;
@@ -51,7 +53,7 @@ class Node
 			//startnode
 			this.parent_x = -10;
 			this.parent_y = -10;
-
+      this.startdir = direction;
 		}
 		else{
 		switch(direction)
@@ -84,6 +86,7 @@ class MyAgentState
   public Node Graph[][] = new Node[30][30];
 
 	public Queue<Integer> Q = new LinkedList<Integer>(); //action que
+  public Vector<Integer> home = new Vector<>();
 
 	public int initialized = 0;
 	final int UNKNOWN 	= 0;
@@ -184,10 +187,10 @@ class MyAgentState
    //node - parent
    if (!n.hasparent){
      //gohome!
-    // gohome(state.Graph,state.Graph[n.getx(),n.get(y)]);
-     Q.add(ACTION_NONE);
-     System.out.println("we have clenaed");
-   }
+      gohome(home,n,direction);
+      //Q.add(ACTION_NONE);
+    }
+
    System.out.println("gotoparent nodes parents");
    System.out.println(n.getparentx());
    System.out.println(n.getparenty());
@@ -403,6 +406,58 @@ public void turn(int agent_direction, Boolean bump)
     }
 
 }
+public void gohome(Vector<Integer> home,Node n, int agent_direction)
+  {
+
+    int rightturns;
+    int cur_dir = agent_direction;
+    System.out.println("curdir: " + cur_dir + "start_dir" + n.startdir);
+    //turn to agent startdirection
+    while(cur_dir != n.startdir)
+    {
+      cur_dir++;
+      if(cur_dir > 3 )
+        {cur_dir=0;}
+
+      if(cur_dir < 0)
+        {cur_dir=3;}
+
+      Q.add(ACTION_TURN_RIGHT);
+        ///System.out.println("curdir: " + cur_dir);
+    }
+     int action;
+    //make every inverse moves
+    Boolean first_forw = true;
+    for (int i = home.size()-1; i>0; i--){
+      action = home.elementAt(i);
+      switch (action){
+        case ACTION_TURN_RIGHT:
+        //make left turn
+        Q.add(ACTION_TURN_LEFT);
+        first_forw = true;
+        break;
+        case ACTION_TURN_LEFT:
+        //make right turn
+        Q.add(ACTION_TURN_RIGHT);
+        first_forw = true;
+        break;
+        case ACTION_MOVE_FORWARD:
+
+        if (first_forw){
+          //switch direction
+        Q.add(ACTION_TURN_LEFT);
+        Q.add(ACTION_TURN_LEFT);
+        Q.add(ACTION_MOVE_FORWARD);
+        first_forw = false;
+      }else{
+        Q.add(ACTION_MOVE_FORWARD);
+      }
+        break;
+      }
+    }
+    Q.add(ACTION_NONE);
+  }
+
 public void printnode(int x,int y){
   System.out.println("Node {");
   System.out.println("x: " + Graph[x][y].x + "\ny: " +Graph[x][y].y);
@@ -436,13 +491,16 @@ class MyAgentProgram implements AgentProgram {
 		    if (state.agent_direction<0)
 		    	state.agent_direction +=4;
 		    state.agent_last_action = state.ACTION_TURN_LEFT;
+        state.home.add(state.ACTION_TURN_LEFT);
 			return LIUVacuumEnvironment.ACTION_TURN_LEFT;
 		} else if (action==1) {
 			state.agent_direction = ((state.agent_direction+1) % 4);
 		    state.agent_last_action = state.ACTION_TURN_RIGHT;
+        state.home.add(state.ACTION_TURN_RIGHT);
 		    return LIUVacuumEnvironment.ACTION_TURN_RIGHT;
 		}
 		state.agent_last_action=state.ACTION_MOVE_FORWARD;
+    state.home.add(state.ACTION_MOVE_FORWARD);
 		return LIUVacuumEnvironment.ACTION_MOVE_FORWARD;
 	}
 
@@ -459,7 +517,7 @@ class MyAgentProgram implements AgentProgram {
     		state.updatePosition((DynamicPercept) percept);
 			System.out.println("Processing percepts after the last execution of moveToRandomStartPosition()");
 			state.agent_last_action=state.ACTION_SUCK;
-      state.addnode(state.agent_x_position,state.agent_y_position,999,false);
+      state.addnode(state.agent_x_position,state.agent_y_position,state.agent_direction,false);
 	    	return LIUVacuumEnvironment.ACTION_SUCK;
     	}
 
@@ -535,6 +593,7 @@ class MyAgentProgram implements AgentProgram {
             }
 
             System.out.println("Queue: " + state.Q);
+            System.out.println("vector: " + state.home);
             switch(state.Q.poll())
             {
 
