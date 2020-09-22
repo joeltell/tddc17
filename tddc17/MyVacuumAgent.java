@@ -86,7 +86,7 @@ class MyAgentState
   public Node Graph[][] = new Node[30][30];
 
 	public Queue<Integer> Q = new LinkedList<Integer>(); //action que
-  public Vector<Integer> home = new Vector<>();
+
 
 	public int initialized = 0;
 	final int UNKNOWN 	= 0;
@@ -186,16 +186,12 @@ class MyAgentState
     //move vacuumcleaner to parent for n
    //node - parent
    if (!n.hasparent){
-     //gohome!
-      gohome(home,n,direction);
+      gohome(n,direction);
       Q.add(ACTION_SUCK);
       Q.add(ACTION_NONE);
     }
 
-   System.out.println("gotoparent nodes parents");
-   System.out.println(n.getparentx());
-   System.out.println(n.getparenty());
-   System.out.println("node x , y: " + n.getx() +", "+n.gety());
+
    if (n.getx() != n.getparentx() ){
      //move west or east
      if ( n.getparentx() - n.getx() < 0){
@@ -289,9 +285,7 @@ class MyAgentState
 
 public void turn(int agent_direction, Boolean bump)
 {
-
-//if(bump)
-//{
+    //check for unexplored tiles around agent
     switch (agent_direction) {
     case MyAgentState.NORTH:
       if(!bump && world[agent_x_position][agent_y_position-1] == UNKNOWN && world[agent_x_position][agent_y_position-1] != WALL || world[agent_x_position][agent_y_position-1] == HOME)
@@ -338,6 +332,7 @@ public void turn(int agent_direction, Boolean bump)
       }
       else if(world[agent_x_position-1][agent_y_position] != WALL && world[agent_x_position-1][agent_y_position] == UNKNOWN || world[agent_x_position-1][agent_y_position] == HOME)
       {
+        //turn 180 degreess
         Q.add(ACTION_TURN_RIGHT);
         Q.add(ACTION_TURN_RIGHT);
         Q.add(ACTION_MOVE_FORWARD);
@@ -407,7 +402,7 @@ public void turn(int agent_direction, Boolean bump)
     }
 
 }
-public void gohome(Vector<Integer> home,Node n, int agent_direction)
+public void gohome(Node n, int agent_direction)
   {
 
     int goal_x = 1;
@@ -416,7 +411,7 @@ public void gohome(Vector<Integer> home,Node n, int agent_direction)
     int cur_y = n.gety();
     int cur_dir = agent_direction;
     //turn west
-  /*  while(cur_dir != WEST)
+    while(cur_dir != WEST)
       {
         cur_dir++;
         if(cur_dir > 3 )
@@ -441,59 +436,10 @@ public void gohome(Vector<Integer> home,Node n, int agent_direction)
       Q.add(ACTION_MOVE_FORWARD);
       cur_y--;
     }
-*/
-    //turn to agent startdirection
-  /* while(cur_dir != n.startdir)
-    {
-      cur_dir++;
-      if(cur_dir > 3 )
-        {cur_dir=0;}
 
-      if(cur_dir < 0)
-        {cur_dir=3;}
 
-      Q.add(ACTION_TURN_RIGHT);
-        ///System.out.println("curdir: " + cur_dir);
-    }
-     int action;
-    //make every inverse moves
-    Boolean first_forw = true;
-    for (int i = home.size()-1; i>0; i--){
-      action = home.elementAt(i);
-      switch (action){
-        case ACTION_TURN_RIGHT:
-        //make left turn
-        Q.add(ACTION_TURN_LEFT);
-        //first_forw = true;
-        break;
-        case ACTION_TURN_LEFT:
-        //make right turn
-        Q.add(ACTION_TURN_RIGHT);
-        //first_forw = true;
-        break;
-        case ACTION_MOVE_FORWARD:
-
-        if (first_forw){
-          //switch direction
-        Q.add(ACTION_TURN_LEFT);
-        Q.add(ACTION_TURN_LEFT);
-        Q.add(ACTION_MOVE_FORWARD);
-        first_forw = false;
-      }else{
-        Q.add(ACTION_MOVE_FORWARD);
-      }
-        break;
-      }
-    }
-    //Q.add(ACTION_NONE);*/
   }
 
-public void printnode(int x,int y){
-  System.out.println("Node {");
-  System.out.println("x: " + Graph[x][y].x + "\ny: " +Graph[x][y].y);
-  System.out.println("px: " + Graph[x][y].parent_x + "\npy: " +Graph[x][y].parent_y);
-  System.out.println("}");
-}
 
 }
 
@@ -521,16 +467,13 @@ class MyAgentProgram implements AgentProgram {
 		    if (state.agent_direction<0)
 		    	state.agent_direction +=4;
 		    state.agent_last_action = state.ACTION_TURN_LEFT;
-        state.home.add(state.ACTION_TURN_LEFT);
 			return LIUVacuumEnvironment.ACTION_TURN_LEFT;
 		} else if (action==1) {
 			state.agent_direction = ((state.agent_direction+1) % 4);
 		    state.agent_last_action = state.ACTION_TURN_RIGHT;
-        state.home.add(state.ACTION_TURN_RIGHT);
 		    return LIUVacuumEnvironment.ACTION_TURN_RIGHT;
 		}
 		state.agent_last_action=state.ACTION_MOVE_FORWARD;
-    state.home.add(state.ACTION_MOVE_FORWARD);
 		return LIUVacuumEnvironment.ACTION_MOVE_FORWARD;
 	}
 
@@ -619,11 +562,9 @@ class MyAgentProgram implements AgentProgram {
 		    {
             while(state.Q.isEmpty())
             {
+              //put actions in que
               state.turn(state.agent_direction,bump);
             }
-
-            System.out.println("Queue: " + state.Q);
-            System.out.println("vector: " + state.home);
             switch(state.Q.poll())
             {
 
@@ -654,8 +595,6 @@ class MyAgentProgram implements AgentProgram {
                 return NoOpAction.NO_OP;
 
             }
-
-        //nödlösning for compile
         return LIUVacuumEnvironment.ACTION_MOVE_FORWARD;
       }
 }
