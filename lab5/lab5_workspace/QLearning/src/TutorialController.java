@@ -12,7 +12,7 @@ public class TutorialController extends Controller {
 	DoubleFeature angle; /* Angle */
 
     /* Example:
-     * x.getValue() returns the vertical position of the rocket 
+     * x.getValue() returns the vertical position of the rocket
      */
 
 	/* These are the agents actuators (outputs)*/
@@ -21,9 +21,9 @@ public class TutorialController extends Controller {
 	RocketEngine rightRocket;
 
     /* Example:
-     * leftRocket.setBursting(true) turns on the left rocket 
+     * leftRocket.setBursting(true) turns on the left rocket
      */
-	
+
 	public void init() {
 		cso = (ComposedSpringObject) object;
 		x = (DoubleFeature) cso.getObjectById("x");
@@ -40,7 +40,14 @@ public class TutorialController extends Controller {
     public void tick(int currentTime) {
 
     	/* TODO: Insert your code here */
-    	
+      System.out.println(vx.getValue());
+      System.out.println(vy.getValue());
+      System.out.println(angle.getValue());
+      if(vy.getValue() > 1 || vx.getValue() > 1)
+      {
+        leftRocket.setBursting(true);
+      }
+
     }
 
 }

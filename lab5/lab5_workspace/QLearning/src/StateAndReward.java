@@ -1,13 +1,21 @@
 public class StateAndReward {
 
-	
+
 	/* State discretization function for the angle controller */
 	public static String getStateAngle(double angle, double vx, double vy) {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
 		String state = "OneStateToRuleThemAll";
-		
+if(-1.5 < angle && angle < -0.5)
+{
+	state = "kör uppåt vänster";
+}
+if(-0.5 < angle && angle < 0.5)
+{
+	state = "kör uppåt state";
+}
+
 		return state;
 	}
 
@@ -15,7 +23,7 @@ public class StateAndReward {
 	public static double getRewardAngle(double angle, double vx, double vy) {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
-		
+
 		double reward = 0;
 
 		return reward;
@@ -27,7 +35,7 @@ public class StateAndReward {
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
 		String state = "OneStateToRuleThemAll2";
-		
+
 		return state;
 	}
 
@@ -35,7 +43,7 @@ public class StateAndReward {
 	public static double getRewardHover(double angle, double vx, double vy) {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
-		
+
 		double reward = 0;
 
 		return reward;
