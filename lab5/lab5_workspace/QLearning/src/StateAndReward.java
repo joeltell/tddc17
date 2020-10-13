@@ -9,13 +9,37 @@ public class StateAndReward {
 		String state = "OneStateToRuleThemAll";
 if(-1.5 < angle && angle < -0.5)
 {
-	state = "kör uppåt vänster";
-}
-if(-0.5 < angle && angle < 0.5)
-{
-	state = "kör uppåt state";
+	state = "NorthWest";
 }
 
+else if(-0.5 < angle && angle < 0.5)
+{
+	state = "North";
+}
+else if(0.5<angle && angle<1.5)
+{
+	state= "NorthEast";
+}
+else if(angle == 1.5)
+{
+	state = "East";
+}
+else if( angle == -1.5)
+{
+	state = "West";
+}
+else if(1.5<angle && angle<2.5)
+{
+	state = "SouthEast";
+}
+else if (-2.5 <angle && angle< -1.5)
+{
+	state = "SouthWest";
+}
+else if(2.5<angle || angle< -2.5)
+{
+	state = "South";
+}
 		return state;
 	}
 

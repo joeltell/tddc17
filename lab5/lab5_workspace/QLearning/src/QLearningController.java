@@ -88,6 +88,27 @@ public class QLearningController extends Controller {
 		/* Fire zeh rockets! */
 		/* TODO: Remember to change NUM_ACTIONS constant to reflect the number of actions (including 0, no action) */
 		/* TODO: IMPLEMENT THIS FUNCTION */
+		resetRockets();
+			switch(action)
+			{
+				case 0: //turn right
+					leftEngine.setBursting(true);
+					break;
+				case 1: //turn left
+					rightEngine.setBursting(true);
+					break;
+				case 2: //move forward
+					middleEngine.setBursting(true);
+					break;
+				case 3: // fire all
+					leftEngine.setBursting(true);
+					rightEngine.setBursting(true);
+					middleEngine.setBursting(true);
+					break;
+				default:
+					break;
+			}
+
 
 
 	}
