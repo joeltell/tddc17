@@ -3,7 +3,7 @@ import java.text.NumberFormat;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Random;
-import java.lang.Math.wildcard;
+import java.lang.*;
 
 /* TODO:
  * -Define state and reward functions (StateAndReward.java) suitable for your problem
@@ -163,7 +163,7 @@ public class QLearningController extends Controller {
 	 /*previousActionEstimations[action] *= (1.0 - learningRate);
 	 previousActionEstimations[action] += (learningRate * (reward + discountFactor * maxNextExpectedReward));
 	*/
-	 Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) * (1.0-alpha(Ntable.get(prev_stateaction))));
+	 //Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) * (1.0-alpha(Ntable.get(prev_stateaction))));
 	 Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) + alpha(Ntable.get(prev_stateaction)) * previous_reward
 	 +GAMMA_DISCOUNT_FACTOR * getMaxActionQValue(new_state) - Qtable.get(prev_stateaction));
 
