@@ -6,7 +6,7 @@ public class StateAndReward {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
-		String state = "OneStateToRuleThemAll";
+		String state = "South";
 if(-1.5 < angle && angle < -0.5)
 {
 	state = "NorthWest";
@@ -36,7 +36,7 @@ else if (-2.5 <angle && angle< -1.5)
 {
 	state = "SouthWest";
 }
-else if(2.5<angle || angle< -2.5)
+else
 {
 	state = "South";
 }
@@ -49,6 +49,10 @@ else if(2.5<angle || angle< -2.5)
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
 		double reward = 0;
+		if(-4 < vy && vy < 4 && -1 < vx && vx < 1 && -0.5 < angle && angle < 0.5 )
+		{
+			reward = 5;
+		}
 
 		return reward;
 	}
