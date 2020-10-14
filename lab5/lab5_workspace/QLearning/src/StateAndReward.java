@@ -6,7 +6,7 @@ public class StateAndReward {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
-		String state = "South";
+		String state = null;
 if(-1.5 < angle && angle < -0.5)
 {
 	state = "NorthWest";
@@ -49,11 +49,25 @@ else
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
 		double reward = 0;
-		if(-4 < vy && vy < 4 && -1 < vx && vx < 1 && -0.5 < angle && angle < 0.5 )
+		if (angle == 0)
+		{
+			reward = 10002;
+		}
+		reward = Math.abs(1/angle);
+		//-4 < vy && vy < 4 && -1 < vx && vx < 1 &&
+		/*if( -0.5 < angle && angle < 0.5 )
 		{
 			reward = 5;
+		}*/
+		/*
+		else if(-2.5 <angle && angle< -1.5)
+		{
+			reward = 2.5;
 		}
-
+		else if(1.5<angle && angle<2.5)
+		{
+			reward = 2.5;
+		}*/
 		return reward;
 	}
 

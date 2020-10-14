@@ -3,6 +3,7 @@ import java.text.NumberFormat;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Random;
+import java.lang.Math.wildcard;
 
 /* TODO:
  * -Define state and reward functions (StateAndReward.java) suitable for your problem
@@ -93,24 +94,26 @@ public class QLearningController extends Controller {
 			{
 				case 0: //turn right
 					leftEngine.setBursting(true);
-					System.out.println("vänster kanon på");
+				//	System.out.println("vänster kanon på");
 					break;
 				case 1: //turn left
 					rightEngine.setBursting(true);
-					System.out.println("höger kanon på");
+					//System.out.println("höger kanon på");
 					break;
 				case 2: //move forward
 					middleEngine.setBursting(true);
-					System.out.println("mitten kanon på");
+					//System.out.println("mitten kanon på");
 					break;
 				case 3: // fire all
-
+					leftEngine.setBursting(true);
+					rightEngine.setBursting(true);
 					middleEngine.setBursting(true);
-					System.out.println("mitten kanon på");
+
+
+					//System.out.println("mitten kanon på");
 					break;
 				default:
-				middleEngine.setBursting(true);
-				System.out.println("ingen kanon på");
+				//System.out.println("ingen kanon på");
 					break;
 			}
 
@@ -162,7 +165,7 @@ public class QLearningController extends Controller {
 	*/
 	 Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) * (1.0-alpha(Ntable.get(prev_stateaction))));
 	 Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) + alpha(Ntable.get(prev_stateaction)) * previous_reward
-	 +GAMMA_DISCOUNT_FACTOR * getMaxActionQValue(new_state));
+	 +GAMMA_DISCOUNT_FACTOR * getMaxActionQValue(new_state) - Qtable.get(prev_stateaction));
 
 
 				/* See top for constants and below for helper functions */
@@ -174,14 +177,14 @@ public class QLearningController extends Controller {
 
 				/* Only print every 10th line to reduce spam */
 				print_counter++;
-/*
+
 				if (print_counter % 10 == 0) {
 					System.out.println("ITERATION: " + iteration + " SENSORS: a=" + df.format(angle.getValue()) + " vx=" + df.format(vx.getValue()) +
 							" vy=" + df.format(vy.getValue()) + " P_STATE: " + previous_state + " P_ACTION: " + previous_action +
 							" P_REWARD: " + df.format(previous_reward) + " P_QVAL: " + df.format(Qtable.get(prev_stateaction)) + " Tested: "
 							+ Ntable.get(prev_stateaction) + " times.");
 				}
-*/
+
 				previous_vy = vy.getValue();
 				previous_vx = vx.getValue();
 				previous_angle = angle.getValue();
@@ -235,16 +238,16 @@ public class QLearningController extends Controller {
 		double maxQval = Double.NEGATIVE_INFINITY;
 		for (int i = 0; i < NUM_ACTIONS; i++) {
 			String test_pair = state + i; /* Generate a state-action pair for all actions */
-			System.out.println("test_pair "+test_pair);
+			//System.out.println("test_pair "+test_pair);
 			double Qval = 0;
 			if (Qtable.get(test_pair) != null) {
 				Qval = Qtable.get(test_pair);
-				System.out.println("Qval:  "+Qval);
+				//System.out.println("Qval:  "+Qval);
 			}
 			if (Qval > maxQval) {
 				maxQval = Qval;
 				action = i;
-				System.out.println("action: "+action);
+				//System.out.println("action: "+action);
 			}
 		}
 		return action;
