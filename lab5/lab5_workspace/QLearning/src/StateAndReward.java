@@ -1,5 +1,9 @@
 public class StateAndReward {
 
+public static final int nr_states = 10;
+//public static final max_angle = 2;
+//public static final min_angle = -2;
+
 
 	/* State discretization function for the angle controller */
 	public static String getStateAngle(double angle, double vx, double vy) {
@@ -7,42 +11,12 @@ public class StateAndReward {
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
 		String state = null;
-if(-1.5 < angle && angle < -0.5)
-{
-	state = "NorthWest";
-}
 
-else if(-0.5 < angle && angle < 0.5)
-{
-	state = "North";
-}
-else if(0.5<angle && angle<1.5)
-{
-	state= "NorthEast";
-}
-else if(angle == 1.5)
-{
-	state = "East";
-}
-else if( angle == -1.5)
-{
-	state = "West";
-}
-else if(1.5<angle && angle<2.5)
-{
-	state = "SouthEast";
-}
-else if (-2.5 <angle && angle< -1.5)
-{
-	state = "SouthWest";
-}
-else
-{
-	state = "South";
-}
+		state = Integer.toString(discretize(angle,nr_states,-1.5,1.5));
+
 		return state;
-	}
 
+}
 	/* Reward function for the angle controller */
 	public static double getRewardAngle(double angle, double vx, double vy) {
 
@@ -53,21 +27,12 @@ else
 		{
 			reward = 10002;
 		}
-		reward = Math.abs(1/angle);
-		//-4 < vy && vy < 4 && -1 < vx && vx < 1 &&
-		/*if( -0.5 < angle && angle < 0.5 )
+		else
 		{
-			reward = 5;
-		}*/
-		/*
-		else if(-2.5 <angle && angle< -1.5)
-		{
-			reward = 2.5;
+			reward = Math.abs(1/angle);
 		}
-		else if(1.5<angle && angle<2.5)
-		{
-			reward = 2.5;
-		}*/
+
+	//	reward =  Math.PI - math.abs(angle);
 		return reward;
 	}
 

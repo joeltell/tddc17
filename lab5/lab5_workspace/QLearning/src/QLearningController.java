@@ -108,8 +108,6 @@ public class QLearningController extends Controller {
 					leftEngine.setBursting(true);
 					rightEngine.setBursting(true);
 					middleEngine.setBursting(true);
-
-
 					//System.out.println("mitten kanon på");
 					break;
 				default:
@@ -159,13 +157,10 @@ public class QLearningController extends Controller {
 				Q.put(sa, Q_sa + alpha(Nsa, s, a)
 						* (r + gamma * maxAPrime(sPrime) - Q_sa));
 	*/
-//kod från annan google kille som är mer intiutiv?
-	 /*previousActionEstimations[action] *= (1.0 - learningRate);
-	 previousActionEstimations[action] += (learningRate * (reward + discountFactor * maxNextExpectedReward));
-	*/
+
 	 //Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) * (1.0-alpha(Ntable.get(prev_stateaction))));
-	 Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) + alpha(Ntable.get(prev_stateaction)) * previous_reward
-	 +GAMMA_DISCOUNT_FACTOR * getMaxActionQValue(new_state) - Qtable.get(prev_stateaction));
+	 Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) + alpha(Ntable.get(prev_stateaction)) * (previous_reward
+	 +GAMMA_DISCOUNT_FACTOR * getMaxActionQValue(new_state) - Qtable.get(prev_stateaction)));
 
 
 				/* See top for constants and below for helper functions */
