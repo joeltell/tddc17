@@ -1,8 +1,16 @@
 public class StateAndReward {
 
-public static final int nr_states = 10;
-//public static final max_angle = 2;
-//public static final min_angle = -2;
+	public static final double maxangle = 2;
+	public static final double minangle = -2;
+	public static final double minvx = -1;
+	public static final double maxvx = 1;
+	public static final double minvy = -3;
+	public static final double maxvy = 3;
+
+	public static final int nrstates = 12;
+	public static final int vstates =8;
+	public static final int xstates =2;
+
 
 
 	/* State discretization function for the angle controller */
@@ -10,12 +18,11 @@ public static final int nr_states = 10;
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
-		String state = null;
-
-		state = Integer.toString(discretize(angle,nr_states,-1.5,1.5));
-
+		// discretize(double value, int nrValues, double min,double max)
+		int tmp;
+		tmp = discretize(angle,nrstates,minangle,maxangle);
+		String state = String.valueOf(tmp);
 		return state;
-
 }
 	/* Reward function for the angle controller */
 	public static double getRewardAngle(double angle, double vx, double vy) {
@@ -40,8 +47,17 @@ public static final int nr_states = 10;
 	public static String getStateHover(double angle, double vx, double vy) {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
+		//states are combination of velocity x,y
+		//and angle
+		double vstatey;
+		double vstatex;
+		double anglestate;
+		//discretisize based on velocity in x
+		double vstatex =  discretize(vx,xstate,minvx,maxvx);
+		double vstatey =  discretize(vy,ystate,minvy,maxvy);
+		double anglestate = discretize(angle,nrstates,minangle,maxangle);
 
-		String state = "OneStateToRuleThemAll2";
+		String state = String.valueOf(vstatex + vstatey + anglestate);
 
 		return state;
 	}
@@ -50,6 +66,10 @@ public static final int nr_states = 10;
 	public static double getRewardHover(double angle, double vx, double vy) {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
+		//higher rewards for low velocities in both x and y
+		// also high rewards for low angles (rocket is vertical)
+
+
 
 		double reward = 0;
 
