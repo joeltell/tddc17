@@ -2,14 +2,15 @@ public class StateAndReward {
 
 	public static final double maxangle = 2;
 	public static final double minangle = -2;
+
 	public static final double minvx = -1;
 	public static final double maxvx = 1;
 	public static final double minvy = -3;
 	public static final double maxvy = 3;
 
 	public static final int nrstates = 12;
-	public static final int vstates =8;
-	public static final int xstates =2;
+	public static final int ystate =8;
+	public static final int xstate =4;
 
 
 
@@ -39,7 +40,7 @@ public class StateAndReward {
 			reward = Math.abs(1/angle);
 		}
 
-	//	reward =  Math.PI - math.abs(angle);
+	//	reward^2 =  Math.PI - math.abs(angle);
 		return reward;
 	}
 
@@ -53,11 +54,11 @@ public class StateAndReward {
 		double vstatex;
 		double anglestate;
 		//discretisize based on velocity in x
-		double vstatex =  discretize(vx,xstate,minvx,maxvx);
-		double vstatey =  discretize(vy,ystate,minvy,maxvy);
-		double anglestate = discretize(angle,nrstates,minangle,maxangle);
+		 vstatex =  discretize(vx,xstate,minvx,maxvx);
+		 vstatey =  discretize(vy,ystate,minvy,maxvy);
+		 anglestate = discretize(angle,nrstates,minangle,maxangle);
 
-		String state = String.valueOf(vstatex + vstatey + anglestate);
+		String state = String.valueOf(vstatex) + String.valueOf(vstatey) + String.valueOf(anglestate);
 
 		return state;
 	}
@@ -68,11 +69,34 @@ public class StateAndReward {
 		/* TODO: IMPLEMENT THIS FUNCTION */
 		//higher rewards for low velocities in both x and y
 		// also high rewards for low angles (rocket is vertical)
-
-
-
+		double rewarda = 0;
+		double rewardx = 0;
+		double rewardy = 0;
 		double reward = 0;
+		if(Math.abs(angle) <= maxangle)
+		{
+			rewarda = Math.pow(1-Math.abs(angle/maxangle),2);
+		}
+		if(Math.abs(vx) <= maxvx)
+		{
+			rewardx = Math.pow(1 - Math.abs(vx/maxvx),2);
+		}
+		if(Math.abs(vy) <= maxvy)
+		{
+			rewardy = Math.pow(1 - Math.abs(vy/maxvy),2);
+		}
 
+
+
+/*
+		reward = Math.pow(1/(Math.PI-angle),2);
+		reward = Math.abs(reward)+Math.pow(1/Math.abs(vy),2);
+		reward = reward + Math.pow(1/Math.abs(vx),2);
+*/
+
+		 //reward = 1 / Math.abs(vy+vx+angle);
+		// Math.pow(reward,4);
+		reward = rewardy + rewardx + rewarda;
 		return reward;
 	}
 
