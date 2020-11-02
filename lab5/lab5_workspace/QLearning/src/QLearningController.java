@@ -94,24 +94,22 @@ public class QLearningController extends Controller {
 			{
 				case 0: //turn right
 					leftEngine.setBursting(true);
-				//	System.out.println("vänster kanon på");
 					break;
 				case 1: //turn left
 					rightEngine.setBursting(true);
-					//System.out.println("höger kanon på");
+
 					break;
 				case 2: //move forward
 					middleEngine.setBursting(true);
-					//System.out.println("mitten kanon på");
+
 					break;
 				case 3: // fire all
 					leftEngine.setBursting(true);
 					rightEngine.setBursting(true);
 					middleEngine.setBursting(true);
-					//System.out.println("mitten kanon på");
+
 					break;
 				default:
-				//System.out.println("ingen kanon på");
 					break;
 			}
 
@@ -152,13 +150,7 @@ public class QLearningController extends Controller {
 
 
 				/* TODO: IMPLEMENT Q-UPDATE HERE! */
-				//kod från boken:
-	/*
-				Q.put(sa, Q_sa + alpha(Nsa, s, a)
-						* (r + gamma * maxAPrime(sPrime) - Q_sa));
-	*/
 
-	 //Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) * (1.0-alpha(Ntable.get(prev_stateaction))));
 	 Qtable.put(prev_stateaction, Qtable.get(prev_stateaction) + alpha(Ntable.get(prev_stateaction)) * (previous_reward
 	 +GAMMA_DISCOUNT_FACTOR * getMaxActionQValue(new_state) - Qtable.get(prev_stateaction)));
 
@@ -237,12 +229,12 @@ public class QLearningController extends Controller {
 			double Qval = 0;
 			if (Qtable.get(test_pair) != null) {
 				Qval = Qtable.get(test_pair);
-				//System.out.println("Qval:  "+Qval);
+			
 			}
 			if (Qval > maxQval) {
 				maxQval = Qval;
 				action = i;
-				//System.out.println("action: "+action);
+
 			}
 		}
 		return action;

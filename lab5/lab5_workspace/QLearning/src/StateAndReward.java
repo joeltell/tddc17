@@ -86,16 +86,6 @@ public class StateAndReward {
 			rewardy = Math.pow(1 - Math.abs(vy/maxvy),2);
 		}
 
-
-
-/*
-		reward = Math.pow(1/(Math.PI-angle),2);
-		reward = Math.abs(reward)+Math.pow(1/Math.abs(vy),2);
-		reward = reward + Math.pow(1/Math.abs(vx),2);
-*/
-
-		 //reward = 1 / Math.abs(vy+vx+angle);
-		// Math.pow(reward,4);
 		reward = rewardy + rewardx + rewarda;
 		return reward;
 	}
