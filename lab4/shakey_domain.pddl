@@ -4,7 +4,7 @@
    (:types
 		   room
        wide_door
-      ;narrow_door
+
        box
        light-switch
        robot
@@ -12,19 +12,19 @@
        object
        )
        (:predicates
-       (object-in	?o - object ?r - room) ; är det ett object i room
+       (object-in	?o - object ?r - room) ; is object ?o in room ?r
        (holding ?g - grip ?o - object); is grip ?g holdig object ?o
-		   (empty ?g - grip)				; is grip ?g empty and is ?g a grip
-       (on ?l  - light-switch ) ;är lampan tänd?
-       (attached ?l  - light-switch ?r - room) ;lamp in specific room
-       (robot-at ?s - robot ?r - room) ; är roboten i rummet?
-       (wide-in ?d - wide_door ?r - room) ;bred dörr?
-       (box-in ?b - box ?r - room)
-       (box-in-pos ?b - box ?l - light-switch)
-       (adjacent ?r1 ?r2 - room)
+		   (empty ?g - grip)				;is grip ?g empty
+       (on ?l  - light-switch ) ;is light ?l on
+       (attached ?l  - light-switch ?r - room) ;is light ?l attached in room ?r
+       (robot-at ?s - robot ?r - room) ; is robot ?s in room ?r
+       (wide-between ?d - wide_door ?r1 ?r2 - room) ;is there a wide door ?d between room ?r1 ?r2
+       (box-in ?b - box ?r - room) ; is box ?b in room ?r
+       (box-in-pos ?b - box ?l - light-switch) ; is box ?b positioned under light-switch ?l
+       (adjacent ?r1 ?r2 - room) ;is room r1 adjacent to room r2
 		)
 
-
+;;carry object in any grip g
    (:action carry
      :parameters (?o - object  ?g - grip ?s - robot ?r - room ?l - light-switch)
      :precondition (and (object-in ?o ?r)
@@ -37,64 +37,48 @@
 							 (not (empty ?g))
      )
 )
+;;drop object from grip g in room r
 (:action drop_object
   :parameters(?g - grip ?r - room ?s - robot ?o - object)
   :precondition (and (not (empty ?g))
                 (holding ?g ?o)
                 (robot-at ?s ?r)
                 )
-  :effect (and (not (holding ?g ?o) ) (empty ?g) )
+  :effect (and (not (holding ?g ?o))  (empty ?g) (object-in ?o ?r)  )
 
   )
-
-  (:action move ;; move without olbject
-    :parameters (?from ?to - room ?s - robot ?d - wide_door ?g - grip)
+;;move to room with our without object
+  (:action move
+    :parameters (?from ?to - room ?s - robot ?d - wide_door)
     :precondition (and (robot-at ?s ?from)
-                  (wide-in ?d ?from)
-                  (empty ?g)
-                  (adjacent ?from ?to)
-                  )
-    :effect (robot-at ?s ?to)
+                  (or (wide-between ?d ?from ?to) (wide-between ?d ?to ?from))
+                  (or (adjacent ?from ?to)(adjacent ?to ?from)
+                  ) )
+    :effect (and (robot-at ?s ?to) (not (robot-at ?s ?from)) )
     )
-    (:action move_object_to_room ;; move with object
-      :parameters (?from ?to - room ?s - robot ?d - wide_door ?g - grip ?o - object)
-      :precondition (and (robot-at ?s ?from)
-                    (wide-in ?d ?from)
-                    (not (empty ?g))
-                    (holding ?g ?o)
-                    (adjacent ?from ?to))
 
-      :effect (and (robot-at ?s ?to) (object-in ?o ?to) )
-      )
 
-(:action push_to_lightswitch;;inroom
+
+;;push box to position in the same room under lightswitch
+(:action push_to_lightswitch
   :parameters(?r - room ?s - robot ?b - box ?l - light-switch)
   :precondition(and (robot-at ?s ?r ) (box-in ?b ?r) (attached ?l ?r) (not (box-in-pos ?b ?l)) )
   :effect(box-in-pos ?b ?l)
 
   )
+;;turn on lights in the room if the box is in position
 (:action turn_on_light
   :parameters (?r - room ?s - robot ?b - box ?l - light-switch)
   :precondition (and (robot-at ?s ?r ) (box-in ?b ?r) (box-in-pos ?b ?l) (not (on ?l)) (attached ?l ?r))
   :effect(on ?l)
   )
-
+;;push box from one room to another
 (:action push_box_to_room
   :parameters (?from ?to - room ?s - robot ?b - box ?d - wide_door)
-  :precondition (and (box-in ?b ?from) (robot-at ?s ?from) (wide-in ?d ?from)(adjacent ?from ?to) )
-  :effect (and (box-in ?b ?to) (robot-at ?s ?to))
+  :precondition (and (box-in ?b ?from) (robot-at ?s ?from) (or (wide-between ?d ?from ?to) (wide-between ?d ?to ?from))
+                (or (adjacent ?from ?to)(adjacent ?to ?from) ) )
+  :effect (and (box-in ?b ?to) (robot-at ?s ?to) (not (box-in ?b ?from)) (not (robot-at ?s ?from)))
   )
 
-    ;; (:action move_object
-      ;;:parameters (?from ?to - room ?s - robot ?d - wide_door ?o - object ?g - grip)
-      ;;:precondition (and (robot-at ?s ?from)
-        ;;            (wide-in ?d ?from)
-          ;;          (not (empty ?g))
-            ;;        )
-      ;;:effect (and (robot-at ?s ?to)
-        ;;      (object-in ?o ?to)
-          ;;    )
-
-      ;)
 
 )
